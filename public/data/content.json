@@ -1,6 +1,6 @@
 {
-    "posts": {
-      "328789723": {
+    "posts": [
+       {
         "creator": "polyca-git",
         "created_at": "2021-08-29T16:56:44.959Z",
         "tags": [
@@ -13,7 +13,7 @@
         "title": "First Post",
         "content": "This is an example content, this is a great content."
       },
-      "328789725": {
+       {
         "creator": "polyca-git",
         "created_at": "2021-08-29T17:56:44.959Z",
         "tags": [
@@ -25,5 +25,5 @@
         "title": "Second Post",
         "content": "This is an example content, this is a great content."
       }
-    }
+    ]
   }

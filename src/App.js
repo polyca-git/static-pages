@@ -1,4 +1,6 @@
 import {useState, useEffect} from 'react';
+import Header from './components/Header';
+import Content from './components/Content';
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -33,14 +35,22 @@ function App() {
     )
   },[]);
 
+  
   if(error){
     return <div>Error: {error.message}</div>;
   } else if(!isLoaded){
     return <div><div className="header"></div><div className="loading">Loading...</div></div>;
   }else{
+    console.log(items)
     return (
       <div className="App">
-        content
+        <Header />
+        <div className="contentContainer">
+          {items.map(item=>(
+            <Content data={item} />
+          ))}
+          
+        </div>
       </div>
     );
   }
