@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-const Header = () => {
+const Header = (props) => {
+    const [searchTerm, setSearchTerm] = useState("");
+
     return(
     <div className="headerContainer">
             <ul className="navBar">
@@ -12,7 +14,7 @@ const Header = () => {
                 </li>
             </ul>
         <div className="searchBar">
-            <input type="text" placeholder='Search...'/>
+            <input onChange={(e)=>props.searchFilter(e.target.value.toUpperCase())}  type="text" placeholder='Search...'/>
         </div>
             
 

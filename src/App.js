@@ -9,6 +9,7 @@ function App() {
   const [items, setItems] = useState([]);
   const [site, setSite] = useState([]);
   const [selected, setSelected]= useState(null);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(()=>{
     fetch('./data/content.json')
@@ -19,6 +20,7 @@ function App() {
         console.log(result.posts);
         setItems(result.posts);
         setSelected(null);
+        setFilteredData(result.posts);
       },
       (error)=> {
         setIsLoaded(true);
@@ -44,7 +46,18 @@ function App() {
   let removeSelected = () => {
       setSelected(null);
   }
-
+  const searchFilter =(val)=> {
+    console.log("we have reached "+val)
+    if(val.length>0){
+      
+      setFilteredData(items.filter(item=>item.title.toUpperCase().includes(val.toUpperCase())));
+    }
+    else{
+      setFilteredData(items);
+      removeSelected();
+    }
+    
+  }
   if(error){
     return <div>Error: {error.message}</div>;
   } else if(!isLoaded){
@@ -53,7 +66,7 @@ function App() {
     if(selected !== null){
      return (
       <div className="App">
-      <Header />
+      <Header searchFilter={searchFilter} data="veli"/>
       <div className="contentContainer">
       <Details removeSelected={removeSelected} data={items.filter(items=>items.id==selected)[0]} />
       </div>
@@ -62,9 +75,9 @@ function App() {
     }else{
       return (
         <div className="App">
-          <Header />
+          <Header searchFilter={searchFilter} />
           <div className="contentContainer">
-            {items.map(item=>(
+            {filteredData.map(item=>(
               <Content key={item.id} data={item} selectedId={selectedId}/>
             ))}
           </div>
