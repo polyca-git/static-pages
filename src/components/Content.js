@@ -10,8 +10,10 @@ const Content = (props) => {
                         <div className="postCreator">{props.data.creator}</div>
                         <div className="postCreatedAt">{props.data.created_at}</div>
                     </div>
-                    <div className="postContent">{props.data.content.substring(0,10)+"..."}<div className="postShowMore">Show More</div></div>
-
+                    <div className="postDescription">
+                    <div className="postContent">{props.data.content.substring(0,100)+"..."}</div><div className="postShowMore" onClick={() => {props.selectedId(props.data.id)}}>Show More</div>
+                    
+                    </div>
                 </div>  
     )
 }
