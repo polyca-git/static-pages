@@ -15,7 +15,8 @@ const Details = (props) => {
                         <div className="detailCreatedAt">{props.data.created_at}</div>
                     </div>
                     <div className="detailDescription">
-                    <div className="detailContent">{props.data.content}</div>
+                    <div className="detailContent" dangerouslySetInnerHTML={{ __html: props.data.content }} />
+                    
                     </div>
                 </div>  
         </div>

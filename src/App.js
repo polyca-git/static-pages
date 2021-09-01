@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Details from './components/Details';
 
+
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
@@ -11,16 +12,63 @@ function App() {
   const [selected, setSelected]= useState(null);
   const [filteredData, setFilteredData] = useState([]);
 
+  const parser = new DOMParser();
+  const regex = /<img.*src\="(.*)"\salt.*\>/;
+  let posts = [];
+  let headImg =[];
+useEffect(()=>{
+  fetch('./data/site.xml')
+  .then(res => res.text())
+  .then(
+    (result)=>{
+      console.log("I am able to fetch the XML data");
+      let xml = parser.parseFromString(result, 'text/xml');
+      console.log(xml);
+      let items = xml.getElementsByTagName('channel')[0].getElementsByTagName('item');
+      console.log(items);
+
+      [].slice.call(items).forEach((e) => {
+        headImg = e.getElementsByTagName('content:encoded')[0].childNodes[0].nodeValue.match(regex);
+        if(headImg && headImg.length>1){
+		  	posts.push({
+          id: e.getElementsByTagName('post-id')[0].childNodes[0].nodeValue,
+          creator: e.getElementsByTagName('dc:creator')[0].childNodes[0].nodeValue,
+          created_at: e.getElementsByTagName('pubDate')[0].childNodes[0].nodeValue,
+          titleImg: headImg[1],
+          tags: [
+            "first",
+          ],
+		    	title: e.getElementsByTagName('title')[0].childNodes[0].nodeValue,
+		      content: e.getElementsByTagName('content:encoded')[0].childNodes[0].nodeValue
+		    });
+      }
+		  });
+      console.log(posts);
+      setIsLoaded(true);
+      setItems(posts);
+      setSelected(null);
+      setFilteredData(posts);
+    },
+    (error)=>{
+      console.log("Unable to fetch XML data");
+    }
+  )
+},[]);
+
+
+
   useEffect(()=>{
     fetch('./data/content.json')
     .then(res => res.json())
     .then(
       (result)=>{
+      /*
         setIsLoaded(true);
         console.log(result.posts);
         setItems(result.posts);
         setSelected(null);
         setFilteredData(result.posts);
+        */
       },
       (error)=> {
         setIsLoaded(true);
