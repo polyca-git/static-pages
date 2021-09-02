@@ -15,7 +15,81 @@ function App() {
   const parser = new DOMParser();
   const regex = /<img.*src\="(.*)"\salt.*\>/;
   let posts = [];
+
+
+  //Wordpress export 
   let headImg =[];
+  let post_id;
+  let post_creator;
+  let post_created_at;
+  let post_title;
+  let post_content;
+  const wp_prefix='wp';
+
+
+
+
+  
+  // WORPRESS EXTENDED RSS EXPORT PARSER
+  useEffect(()=>{
+    fetch('./data/example.xml')
+    .then(res => res.text())
+    .then(
+      (result)=>{
+        console.log("I am able to fetch the XML data");
+        let xml = parser.parseFromString(result, 'text/xml');
+        console.log(xml);
+        let items = xml.getElementsByTagName('channel')[0].getElementsByTagName('item');
+        console.log(items);
+  
+        [].slice.call(items).forEach((e) => {
+          try{
+            headImg = e.getElementsByTagName('content:encoded')[0].childNodes[0].nodeValue.match(regex);
+            post_id =e.getElementsByTagName(wp_prefix+':post_id')[0].childNodes[0].nodeValue;
+            post_creator= e.getElementsByTagName('dc:creator')[0].childNodes[0].nodeValue;
+            console.log(e.getElementsByTagName(wp_prefix+':post_date')[0]);
+            post_created_at=e.getElementsByTagName(wp_prefix+':post_date')[0].childNodes[0].nodeValue;
+            post_title= e.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+            post_content=e.getElementsByTagName('content:encoded')[0].childNodes[0].nodeValue;
+  
+          }catch(error){
+            
+          }
+
+          if(headImg && headImg.length>1 && post_id && post_creator && post_created_at && post_title && post_content){
+          posts.push({
+            id: post_id,
+            creator: post_creator,
+            created_at: post_created_at,
+            titleImg: headImg[1],
+            tags: [
+              "first",
+            ],
+            title: post_title,
+            content: post_content
+          });
+        }
+        });
+        console.log(posts);
+        setIsLoaded(true);
+        setItems(posts);
+        setSelected(null);
+        setFilteredData(posts);
+      },
+      (error)=>{
+        console.log("Unable to fetch XML data");
+      }
+    )
+  },[]);
+
+
+
+
+
+
+
+
+ /* RSS FEED PARSER (WORDPRESS)
 useEffect(()=>{
   fetch('./data/site.xml')
   .then(res => res.text())
@@ -54,7 +128,7 @@ useEffect(()=>{
     }
   )
 },[]);
-
+*/
 
 
   useEffect(()=>{

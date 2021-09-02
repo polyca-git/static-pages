@@ -8,7 +8,7 @@ const Details = (props) => {
                 <img src={back} />
         </div>
                 <div className="detail">
-                    <div className="detailImage"><img src={props.data.titleImg} /></div>
+                    <div className="detailImage"><img src={props.data.titleImg} onError={(e)=>{e.target.onerror = null; e.target.src="./data/img/no-image.png"}}/></div>
                     <div className="detailTitle">{props.data.title}</div>
                     <div className="detailInfo">
                         <div className="detailCreator">{props.data.creator}</div>

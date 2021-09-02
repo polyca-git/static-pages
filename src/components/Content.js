@@ -4,7 +4,7 @@ const Content = (props) => {
     
     return(
                 <div className="post">
-                    <div className="postImage"><img src={props.data.titleImg} /></div>
+                    <div className="postImage"><img src={props.data.titleImg} onError={(e)=>{e.target.onerror = null; e.target.src="./data/img/no-image.png"}}/></div>
                     <div className="postTitle">{props.data.title}</div>
                     <div className="postInfo">
                         <div className="postCreator">{props.data.creator}</div>
